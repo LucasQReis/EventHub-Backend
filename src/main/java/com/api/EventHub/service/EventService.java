@@ -8,16 +8,16 @@ public interface EventService {
     // get all events
     public List<EventDto> getAllEvents();
     // get event by id
-    public EventDto getEventById(EventDto eventDto);
+    public EventDto getEventById(Long id);
     // create a new event
     public EventDto createEvent(EventDto eventDto);
     // update event
     public void updateEvent(Long eventId, EventDto eventDto);
     // delete event
-    public void deleteEvent(Long eventId);
+    public EventDto deleteEvent(Long eventId);
 
-    // search event by filter
-    // change event status
-    // list all events participants
-    // create a review of the given event
+    // TODO search event by filter
+    // TODO change event status
+    // TODO list all events participants
+    // TODO create a review of the given event
 }
