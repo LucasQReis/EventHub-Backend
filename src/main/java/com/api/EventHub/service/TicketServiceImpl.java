@@ -57,7 +57,7 @@ public class TicketServiceImpl implements TicketService {
     public TicketDto createTicket(TicketDto ticketDto) {
 
         Event event = eventRepository.findById(ticketDto.getEventId())
-                .orElseThrow(() -> new IllegalArgumentException("Evento não encontrado com o ID fornecido."));
+                .orElseThrow(() -> new IllegalArgumentException("Event ID not found."));
 
         Ticket ticket = modelMapper.map(ticketDto, Ticket.class);
 
@@ -75,10 +75,10 @@ public class TicketServiceImpl implements TicketService {
     public TicketDto updateTicket(Long ticketId, TicketDto ticketDto) {
         Ticket ticket = ticketRepository.findById(ticketId).orElse(null);
         if (ticket != null) {
-            ticket.setParticipantEmail(ticketDto.getParticipantEmail()); // Campo E-mail que será alterado
-            ticket.setParticipantName(ticketDto.getParticipantName()); // Campo Nome que será alterado
+            ticket.setParticipantEmail(ticketDto.getParticipantEmail()); // Change the E-mail field 
+            ticket.setParticipantName(ticketDto.getParticipantName()); // Change the nome field
 
-            ticketRepository.save(ticket); // Salva as alterações
+            ticketRepository.save(ticket); // Save changes
 
             return modelMapper.map(ticket, TicketDto.class);
         } else {
