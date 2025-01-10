@@ -2,26 +2,32 @@ package com.api.EventHub.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 
 import com.api.EventHub.model.dto.TicketDto;
+import com.api.EventHub.model.entity.Event;
 import com.api.EventHub.model.entity.Ticket;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.api.EventHub.repository.EventRepository;
 import com.api.EventHub.repository.TicketRepository;
 
 @Service
 public class TicketServiceImpl implements TicketService {
 
-     @Autowired
+    @Autowired
     private TicketRepository ticketRepository;
+    @Autowired
+    private EventRepository eventRepository;
 
     @Autowired
     private ModelMapper modelMapper;
+
     @Override
     public List<TicketDto> getAllTickets() {
         List<Ticket> tickets = ticketRepository.findAll();
@@ -49,13 +55,35 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     public TicketDto createTicket(TicketDto ticketDto) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'createTicket'");
+
+        Event event = eventRepository.findById(ticketDto.getEventId())
+                .orElseThrow(() -> new IllegalArgumentException("Event ID not found."));
+
+        Ticket ticket = modelMapper.map(ticketDto, Ticket.class);
+
+        ticket.setEvent(event);
+
+        ticket.setStatus("PENDING");
+        ticket.setQrCode(UUID.randomUUID().toString());
+
+        Ticket savedTicket = ticketRepository.save(ticket);
+
+        return modelMapper.map(savedTicket, TicketDto.class);
     }
 
     @Override
-    public void updateTicket(Long ticketId, TicketDto ticketDto) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updateTicket'");
+    public TicketDto updateTicket(Long ticketId, TicketDto ticketDto) {
+        Ticket ticket = ticketRepository.findById(ticketId).orElse(null);
+        if (ticket != null) {
+            ticket.setParticipantEmail(ticketDto.getParticipantEmail()); // Change the E-mail field 
+            ticket.setParticipantName(ticketDto.getParticipantName()); // Change the nome field
+
+            ticketRepository.save(ticket); // Save changes
+
+            return modelMapper.map(ticket, TicketDto.class);
+        } else {
+            return null;
+        }
     }
+
 }
