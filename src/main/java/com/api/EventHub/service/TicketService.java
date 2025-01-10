@@ -12,7 +12,7 @@ public interface TicketService {
     // create a new ticket
     public TicketDto createTicket(TicketDto ticketDto);
     // update ticket
-    public void updateTicket(Long ticketId, TicketDto ticketDto);
+    public TicketDto updateTicket(Long ticketId, TicketDto ticketDto);
     // delete ticket
     public TicketDto deleteTicket(Long ticketId);
 

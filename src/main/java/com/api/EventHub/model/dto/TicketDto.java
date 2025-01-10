@@ -9,42 +9,139 @@ import java.util.Date;
 @Data
 public class TicketDto {
 
-    @JsonProperty("id_ticket")
+    @JsonProperty("ticketId")
     private Long ticketId;
 
-    @JsonProperty("event_id")
+    @JsonProperty("eventId")
     private Long eventId;
 
-    @JsonProperty("event_name")
+    @JsonProperty("eventName")
     private String eventName;
 
-    @JsonProperty("nm_participant")
+    @JsonProperty("participantName")
     private String participantName;
 
-    @JsonProperty("ds_email")
+    @JsonProperty("participantEmail")
     private String participantEmail;
 
-    @JsonProperty("dt_purchase")
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @JsonProperty("purchaseDate")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "America/Sao_Paulo")
     private Date purchaseDate;
 
-    @JsonProperty("nr_price")
+    @JsonProperty("price")
     private double price;
 
-    @JsonProperty("ds_type")
+    @JsonProperty("ticketType")
     private String ticketType;
 
-    @JsonProperty("ie_status")
+    @JsonProperty("status")
     private String status;
 
-    @JsonProperty("nr_seat")
+    @JsonProperty("seatNumber")
     private String seatNumber;
 
-    @JsonProperty("ds_qr_code")
+    @JsonProperty("qrCode")
     private String qrCode;
 
-    @JsonProperty("nr_quantity")
+    @JsonProperty("quantity")
     private int quantity;
 
     // Getters e Setters
+
+    public Long getTicketId() {
+        return ticketId;
+    }
+
+    public void setTicketId(Long ticketId) {
+        this.ticketId = ticketId;
+    }
+
+    public Long getEventId() {
+        return eventId;
+    }
+
+    public void setEventId(Long eventId) {
+        this.eventId = eventId;
+    }
+
+    public String getEventName() {
+        return eventName;
+    }
+
+    public void setEventName(String eventName) {
+        this.eventName = eventName;
+    }
+
+    public String getParticipantName() {
+        return participantName;
+    }
+
+    public void setParticipantName(String participantName) {
+        this.participantName = participantName;
+    }
+
+    public String getParticipantEmail() {
+        return participantEmail;
+    }
+
+    public void setParticipantEmail(String participantEmail) {
+        this.participantEmail = participantEmail;
+    }
+
+    public Date getPurchaseDate() {
+        return purchaseDate;
+    }
+
+    public void setPurchaseDate(Date purchaseDate) {
+        this.purchaseDate = purchaseDate;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public String getTicketType() {
+        return ticketType;
+    }
+
+    public void setTicketType(String ticketType) {
+        this.ticketType = ticketType;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getSeatNumber() {
+        return seatNumber;
+    }
+
+    public void setSeatNumber(String seatNumber) {
+        this.seatNumber = seatNumber;
+    }
+
+    public String getQrCode() {
+        return qrCode;
+    }
+
+    public void setQrCode(String qrCode) {
+        this.qrCode = qrCode;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
 }
