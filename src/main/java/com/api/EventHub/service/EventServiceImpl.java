@@ -3,6 +3,7 @@ package com.api.EventHub.service;
 import com.api.EventHub.model.dto.EventDto;
 import com.api.EventHub.model.entity.Event;
 import com.api.EventHub.repository.EventRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -43,8 +44,14 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public void updateEvent(Long eventId, EventDto eventDto) {
+    public EventDto updateEvent(Long eventId, EventDto eventDto) {
+        Event existingEvent = eventRepository.findById(eventId)
+                .orElseThrow(() -> new EntityNotFoundException("Event ID " + eventId + " not found!"));
 
+        Event updatedEvent = this.updatedEvent(existingEvent, eventDto);
+        eventRepository.save(updatedEvent);
+
+        return modelMapper.map(updatedEvent, EventDto.class);
     }
 
     @Override
@@ -56,5 +63,22 @@ public class EventServiceImpl implements EventService {
         } else {
             return null;
         }
+    }
+
+    private Event updatedEvent(Event event, EventDto eventDto) {
+        event.setName(eventDto.getName());
+        event.setDescription(eventDto.getDescription());
+        event.setStartDate(eventDto.getStartDate());
+        event.setEndDate(eventDto.getEndDate());
+        event.setLocation(eventDto.getLocation());
+        event.setCity(eventDto.getCity());
+        event.setState(eventDto.getState());
+        event.setCountry(eventDto.getCountry());
+        event.setTotalCapacity(eventDto.getTotalCapacity());
+        event.setStatus(eventDto.getStatus());
+        event.setEventType(eventDto.getEventType());
+        event.setImageUrl(eventDto.getImageUrl());
+
+        return event;
     }
 }

@@ -12,7 +12,7 @@ public interface EventService {
     // create a new event
     public EventDto createEvent(EventDto eventDto);
     // update event
-    public void updateEvent(Long eventId, EventDto eventDto);
+    public EventDto updateEvent(Long eventId, EventDto eventDto);
     // delete event
     public EventDto deleteEvent(Long eventId);
 

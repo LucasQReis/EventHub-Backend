@@ -33,10 +33,19 @@ public class EventController {
     @PostMapping
     public ResponseEntity<EventDto> createEvent(@RequestBody EventDto eventDto) {
         EventDto createdEvent = eventService.createEvent(eventDto);
-        return ResponseEntity.ok(createdEvent);
+        return ResponseEntity.status(201).body(createdEvent);
     }
 
     // update event
+    @PutMapping("/{id}")
+    public ResponseEntity<EventDto> updateEvent(@PathVariable Long id, @RequestBody EventDto eventDto) {
+        EventDto eve = eventService.updateEvent(id, eventDto);
+        if (eve != null) {
+            return ResponseEntity.status(201).body(eve);
+        } else {
+            return ResponseEntity.status(404).build();
+        }
+    }
 
     // delete event
     @DeleteMapping("/{id}")
@@ -48,6 +57,7 @@ public class EventController {
             return ResponseEntity.notFound().build();
         }
     }
+
     // search event by filter
 
     // change event status

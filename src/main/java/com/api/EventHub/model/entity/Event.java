@@ -11,8 +11,8 @@ import java.util.Date;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Entity(name = "EVENT")
 public class Event {
 
@@ -49,9 +49,8 @@ public class Event {
     @Column(name = "NR_TOTAL_CAPACITY")
     private int totalCapacity;
 
-    @Enumerated(EnumType.STRING)
     @Column(name = "IE_STATUS")
-    private EventStatusEnum status;
+    private String status;
 
     @Column(name = "DS_EVENT_TYPE")
     private String eventType;
