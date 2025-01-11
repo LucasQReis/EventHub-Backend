@@ -1,6 +1,5 @@
 package com.api.EventHub.model.entity;
 
-import com.api.EventHub.model.enums.EventStatusEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -15,9 +15,10 @@ public interface EventService {
     public EventDto updateEvent(Long eventId, EventDto eventDto);
     // delete event
     public EventDto deleteEvent(Long eventId);
-
-    // TODO search event by filter
-    // TODO change event status
+    // search event by type filter
+    public List<EventDto> getEventsByType(String type);
+    // change event status
+    public EventDto changeEventStatus(Long eventId, String status);
     // TODO list all events participants
     // TODO create a review of the given event
 }

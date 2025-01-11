@@ -65,6 +65,26 @@ public class EventServiceImpl implements EventService {
         }
     }
 
+    @Override
+    public List<EventDto> getEventsByType(String type) {
+        List<Event> events = eventRepository.findEventsByType(type);
+        return events.stream()
+                .map(event -> modelMapper.map(event, EventDto.class))
+                .toList();
+    }
+
+    @Override
+    public EventDto changeEventStatus(Long eventId, String status) {
+        Event event = eventRepository.findById(eventId).orElse(null);
+        if (event != null) {
+            event.setStatus(status);
+            eventRepository.save(event);
+            return modelMapper.map(event, EventDto.class);
+        } else {
+            return null;
+        }
+    }
+
     private Event updatedEvent(Event event, EventDto eventDto) {
         event.setName(eventDto.getName());
         event.setDescription(eventDto.getDescription());
