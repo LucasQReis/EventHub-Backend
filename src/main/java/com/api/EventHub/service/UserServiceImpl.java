@@ -50,27 +50,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto createUser(UserDto userDto) {
-        User user = new User();
-        user.setName(userDto.getName());
-        user.setLastname(userDto.getLastname());
-        user.setEmail(userDto.getEmail()); // O Spring já vai validar isso automaticamente
-        user.setPhone(userDto.getPhone());
-        user.setPassword(userDto.getPassword());
-        user.setLevelAcess(userDto.getLevelAcess());
-        user.setIeStatus(userDto.getIeStatus());
+        User user = modelMapper.map(userDto, User.class);
 
-        // Configurando a data de criação automaticamente
-        if (userDto.getDateCreateAcount() == null) {
-            user.setDateCreateAcount(Date.valueOf(LocalDate.now()));
-        } else {
-            user.setDateCreateAcount(userDto.getDateCreateAcount());
-        }
+        user.setDateCreateAcount(
+                Optional.ofNullable(userDto.getDateCreateAcount())
+                        .orElse(Date.valueOf(LocalDate.now()))
+        );
 
-        User savedUser = userRepository.save(user);
-        return new UserDto(
-                savedUser.getUserId(), savedUser.getName(), savedUser.getLastname(), savedUser.getDateCreateAcount(),
-                savedUser.getEmail(), savedUser.getPhone(), savedUser.getPassword(), savedUser.getLevelAcess(),
-                savedUser.getDateCreateAcount(), savedUser.getIeStatus());
+        userRepository.save(user);
+
+        return modelMapper.map(user, UserDto.class);
     }
 
     @Override

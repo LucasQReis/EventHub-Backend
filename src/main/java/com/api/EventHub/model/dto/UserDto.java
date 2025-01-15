@@ -1,15 +1,8 @@
 package com.api.EventHub.model.dto;
 
 import java.sql.Date;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,33 +11,31 @@ import lombok.Setter;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@JsonIgnoreProperties(ignoreUnknown = true)
+@Getter
+@Setter
 public class UserDto {
 
-    @JsonProperty("userId")
-    private Long userId;
-
     @JsonProperty("name")
+    @NotNull(message = "Name cannot be null")
     private String name;
 
     @JsonProperty("lastname")
+    @NotNull(message = "Lastname cannot be null")
     private String lastname;
 
-    @JsonProperty("birthday")
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    private Date birthday;
-
-    @JsonProperty("DS_EMAIL")
+    @JsonProperty("email")
     @NotNull(message = "Email cannot be null")
     private String email;
 
-    @JsonProperty("PHONE")
+    @JsonProperty("phone")
     private String phone;
 
-    @JsonProperty("DS_PASSWORD")
+    @JsonProperty("password")
+    @NotNull(message = "Password cannot be null")
     private String password;
 
     @JsonProperty("level_acess")
+    @NotNull(message = "Level acess cannot be null")
     private String levelAcess;
 
     @JsonProperty("date_create_acount")
@@ -54,14 +45,6 @@ public class UserDto {
     private Boolean ieStatus;
 
     // Getters and Setters
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
 
     public String getName() {
         return name;
@@ -77,14 +60,6 @@ public class UserDto {
 
     public void setLastname(String lastname) {
         this.lastname = lastname;
-    }
-
-    public Date getBirthday() {
-        return birthday;
-    }
-
-    public void setBirthday(Date birthday) {
-        this.birthday = birthday;
     }
 
     public String getEmail() {

@@ -16,12 +16,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.api.EventHub.model.dto.UserDto;
 import com.api.EventHub.service.UserServiceImpl;
 
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
-import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping("/user")
 public class UserController {
+
     @Autowired
     private UserServiceImpl userService;
 
@@ -41,7 +41,7 @@ public class UserController {
 
     // Create a new user
     @PostMapping
-    public ResponseEntity<UserDto> createUser(@Valid @RequestBody UserDto userDto) {
+    public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto) {
         UserDto createdUser = userService.createUser(userDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
     }

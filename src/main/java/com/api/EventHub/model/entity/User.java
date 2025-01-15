@@ -1,42 +1,48 @@
 package com.api.EventHub.model.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.sql.Date;
-import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "usuario")
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity(name = "usuario")
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "ID_USER")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_user")
     private Long userId;
 
-    @Column(name = "NM_NAME", nullable = false)
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "LAST_NAME", nullable = false)
+    @Column(name = "lastname", nullable = false)
     private String lastname;
 
-    @Column(name = "DS_EMAIL", nullable = false, unique = true)
+    @Column(name = "email", unique = true, nullable = false)
     private String email;
 
-    @Column(name = "PHONE")
+    @Column(name = "phone")
     private String phone;
 
-    @Column(name = "DS_PASSWORD", nullable = false)
+    @Column(name = "password", nullable = false)
     private String password;
 
     @Column(name = "level_acess", nullable = false)
-    private String levelAcess; // Alterado de 'char' para 'String'
+    private String levelAcess;
 
     @Column(name = "date_create_acount", nullable = false)
-    private Date dateCreateAcount; // Alterado de 'String' para 'LocalDateTime'
+    private Date dateCreateAcount;
 
     @Column(name = "ie_status", nullable = false)
-    private Boolean ieStatus; // Alterado de 'String' para 'Boolean'
+    private Boolean ieStatus;
 
     // Getters e Setters
     public Long getUserId() {
