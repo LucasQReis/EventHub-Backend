@@ -3,7 +3,6 @@ package com.api.EventHub.service;
 import com.api.EventHub.model.dto.EventDto;
 import com.api.EventHub.model.entity.Event;
 import com.api.EventHub.repository.EventRepository;
-import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +19,12 @@ public class EventServiceImpl implements EventService {
 
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    public EventServiceImpl(EventRepository eventRepository, ModelMapper modelMapper) {
+        this.eventRepository = eventRepository;
+        this.modelMapper = modelMapper;
+    }
 
 
     @Override
@@ -45,24 +50,16 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public EventDto updateEvent(Long eventId, EventDto eventDto) {
-        Event existingEvent = eventRepository.findById(eventId)
-                .orElseThrow(() -> new EntityNotFoundException("Event ID " + eventId + " not found!"));
-
-        Event updatedEvent = this.updatedEvent(existingEvent, eventDto);
-        eventRepository.save(updatedEvent);
-
-        return modelMapper.map(updatedEvent, EventDto.class);
+        Optional<Event> event = eventRepository.findById(eventId);
+        event.ifPresent(value -> eventRepository.save(this.updatedEvent(value, eventDto)));
+        return modelMapper.map(event, EventDto.class);
     }
 
     @Override
     public EventDto deleteEvent(Long eventId) {
-        Event event = eventRepository.findById(eventId).orElse(null);
-        if (event != null) {
-            eventRepository.delete(event);
-            return modelMapper.map(event, EventDto.class);
-        } else {
-            return null;
-        }
+        Optional<Event> event = eventRepository.findById(eventId);
+        event.ifPresent(value -> eventRepository.delete(value));
+        return modelMapper.map(event, EventDto.class);
     }
 
     @Override
@@ -75,10 +72,10 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public EventDto changeEventStatus(Long eventId, String status) {
-        Event event = eventRepository.findById(eventId).orElse(null);
-        if (event != null) {
-            event.setStatus(status);
-            eventRepository.save(event);
+        Optional<Event> event = eventRepository.findById(eventId);
+        if (event.isPresent()) {
+            event.get().setStatus(status);
+            eventRepository.save(event.get());
             return modelMapper.map(event, EventDto.class);
         } else {
             return null;

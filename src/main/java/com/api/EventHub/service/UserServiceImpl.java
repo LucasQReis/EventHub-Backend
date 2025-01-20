@@ -2,6 +2,7 @@ package com.api.EventHub.service;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -66,14 +67,23 @@ public class UserServiceImpl implements UserService {
     public UserDto updateUser(Long userId, UserDto userDto) {
         User user = userRepository.findById(userId).orElse(null);
         if (user != null) {
-            user.setName(userDto.getName()); // Change the E-mail field
-            user.setLastname(userDto.getLastname()); // Change the E-mail field
-
-            userRepository.save(user); // Save changes
-
+            user = modelMapper.map(userDto, User.class);
+            userRepository.save(user);
             return modelMapper.map(user, UserDto.class);
         } else {
             return null;
         }
     }
+
+    //TODO - update user name/lastName
+    public String updateUserName(Long userId, UserDto userDto) {
+        Optional<User> user = userRepository.findById(userId);
+        Optional<UserDto> userDto1 = Optional.ofNullable(userDto);
+
+        userDto1.stream().map(u -> userDto1.get() == null); // voltar aqui
+
+        return "";
+    }
+    //TODO - update user password
+    //TODO - update user email
 }

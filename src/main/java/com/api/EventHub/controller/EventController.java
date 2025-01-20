@@ -6,15 +6,23 @@ import com.api.EventHub.model.enums.EventTypeEnum;
 import com.api.EventHub.service.EventServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/events")
-public class EventController {
+public class EventController implements EventControllerApi {
 
     @Autowired
     private EventServiceImpl eventService;
@@ -44,49 +52,43 @@ public class EventController {
     @PutMapping("/{id}")
     public ResponseEntity<EventDto> updateEvent(@PathVariable Long id,
                                                 @RequestBody EventDto eventDto) {
-        EventDto eve = eventService.updateEvent(id, eventDto);
-        if (eve != null) {
-            return ResponseEntity.ok(eve);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        Optional<EventDto> updatedEvent = Optional.ofNullable(eventService.updateEvent(id, eventDto));
+        return updatedEvent.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     // delete event
     @DeleteMapping("/{id}")
     public ResponseEntity<EventDto> deleteEvent(@PathVariable Long id) {
-        EventDto deletedEvent = eventService.deleteEvent(id);
-        if (deletedEvent != null) {
-            return ResponseEntity.ok(deletedEvent);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        Optional<EventDto> deletedEvent = Optional.ofNullable(eventService.deleteEvent(id));
+        return deletedEvent.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     // search all events by typo
     @GetMapping("/type")
     public ResponseEntity<List<EventDto>> getEventsByType(@RequestParam String type) {
-        List<EventDto> events = new ArrayList<>();
+        boolean isValidType = Arrays.stream(EventTypeEnum.values())
+                .anyMatch(eventTypeEnum -> eventTypeEnum.getDescription().equals(type));
 
-        if (Arrays.stream(EventTypeEnum.values())
-                .anyMatch(eventTypeEnum -> eventTypeEnum.getDescription().equals(type))) {
-            events = eventService.getEventsByType(type);
+        if (isValidType) {
+            List<EventDto> events = eventService.getEventsByType(type);
+            return ResponseEntity.ok(events);
+        } else {
+            return ResponseEntity.notFound().build();
         }
-
-        return ResponseEntity.ok(events);
     }
 
     // change event status
     @PutMapping("/status/{id}")
     public ResponseEntity<EventDto> changeEventStatus(@PathVariable Long id,
                                                       @RequestParam String status) {
-        if (Arrays.stream(EventStatusEnum.values())
-                .anyMatch(enumValue -> enumValue.getDescription().equals(status))) {
-            EventDto eventDto = eventService.changeEventStatus(id, status);
-            return ResponseEntity.ok(eventDto);
+        boolean isValidStatus = Arrays.stream(EventStatusEnum.values())
+                .anyMatch(enumValue -> enumValue.getDescription().equals(status));
+
+        if (isValidStatus) {
+            EventDto updatedEvent = eventService.changeEventStatus(id, status);
+            return ResponseEntity.ok(updatedEvent);
         } else {
             return ResponseEntity.notFound().build();
         }
-
     }
 }
