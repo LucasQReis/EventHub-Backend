@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping("/user")
-public class UserController {
+public class UserController implements UserControllerApi {
 
     @Autowired
     private UserServiceImpl userService;
@@ -58,7 +58,6 @@ public class UserController {
     }
 
     // Update User
-
     @PutMapping("/{id}")
     public ResponseEntity<UserDto> updatedUser(
             @PathVariable Long id,
@@ -66,9 +65,9 @@ public class UserController {
         UserDto updatedUser = userService.updateUser(id, userDto);
 
         if (updatedUser != null) {
-            return ResponseEntity.ok(updatedUser); // Retorna o User atualizado com status 200 (OK)
+            return ResponseEntity.ok(updatedUser);
         } else {
-            return ResponseEntity.notFound().build(); // Retorna 404 caso o não seja encontrado
+            return ResponseEntity.notFound().build();
         }
     }
 }
