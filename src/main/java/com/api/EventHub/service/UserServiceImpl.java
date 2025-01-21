@@ -74,16 +74,4 @@ public class UserServiceImpl implements UserService {
             return null;
         }
     }
-
-    //TODO - update user name/lastName
-    public String updateUserName(Long userId, UserDto userDto) {
-        Optional<User> user = userRepository.findById(userId);
-        Optional<UserDto> userDto1 = Optional.ofNullable(userDto);
-
-        userDto1.stream().map(u -> userDto1.get() == null); // voltar aqui
-
-        return "";
-    }
-    //TODO - update user password
-    //TODO - update user email
 }
