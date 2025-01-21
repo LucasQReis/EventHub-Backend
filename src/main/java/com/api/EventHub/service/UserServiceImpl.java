@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.api.EventHub.model.dto.EventDto;
+import com.api.EventHub.model.entity.Event;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -40,13 +42,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto deleteUser(Long userId) {
-        User user = userRepository.findById(userId).orElse(null);
-        if (user != null) {
-            userRepository.delete(user);
-            return modelMapper.map(user, UserDto.class);
-        } else {
-            return null;
-        }
+        Optional<User> user = userRepository.findById(userId);
+        user.ifPresent(value -> userRepository.delete(user.get()));
+        return modelMapper.map(user, UserDto.class);
     }
 
     @Override
@@ -65,13 +63,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto updateUser(Long userId, UserDto userDto) {
-        User user = userRepository.findById(userId).orElse(null);
-        if (user != null) {
-            user = modelMapper.map(userDto, User.class);
-            userRepository.save(user);
-            return modelMapper.map(user, UserDto.class);
-        } else {
-            return null;
-        }
+        Optional<User> user = userRepository.findById(userId);
+        user.ifPresent(value -> userRepository.save(modelMapper.map(userDto, User.class)));
+        return modelMapper.map(user, UserDto.class);
     }
 }

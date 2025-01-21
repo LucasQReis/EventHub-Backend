@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import com.api.EventHub.model.enums.TicketStatusEnum;
 import org.modelmapper.ModelMapper;
 
 import com.api.EventHub.model.dto.TicketDto;
@@ -17,11 +18,14 @@ import org.springframework.stereotype.Service;
 import com.api.EventHub.repository.EventRepository;
 import com.api.EventHub.repository.TicketRepository;
 
+import javax.swing.text.html.Option;
+
 @Service
 public class TicketServiceImpl implements TicketService {
 
     @Autowired
     private TicketRepository ticketRepository;
+
     @Autowired
     private EventRepository eventRepository;
 
@@ -42,48 +46,46 @@ public class TicketServiceImpl implements TicketService {
         return modelMapper.map(ticket, TicketDto.class);
     }
 
+    //TODO - TESTAR
     @Override
     public TicketDto deleteTicket(Long ticketId) {
-        Ticket ticket = ticketRepository.findById(ticketId).orElse(null);
-        if (ticket != null) {
-            ticketRepository.delete(ticket);
-            return modelMapper.map(ticket, TicketDto.class);
-        } else {
-            return null;
-        }
+        Optional<Ticket> ticketDeleted = ticketRepository.findById(ticketId);
+        ticketDeleted.ifPresent(value -> ticketRepository.delete(ticketDeleted.get()));
+        return modelMapper.map(ticketDeleted, TicketDto.class);
     }
 
+    //TODO - TESTAR
     @Override
     public TicketDto createTicket(TicketDto ticketDto) {
+        Optional<Event> event = eventRepository.findById(ticketDto.getEventId());
 
-        Event event = eventRepository.findById(ticketDto.getEventId())
-                .orElseThrow(() -> new IllegalArgumentException("Event ID not found."));
+        if (event.isPresent()) {
+            Ticket ticket = modelMapper.map(ticketDto, Ticket.class);
 
-        Ticket ticket = modelMapper.map(ticketDto, Ticket.class);
+            ticket.setEvent(event.get());
+            ticket.setStatus(TicketStatusEnum.PENDING.getDescription());
+            ticket.setQrCode(UUID.randomUUID().toString());
+            Ticket savedTicket = ticketRepository.save(ticket);
 
-        ticket.setEvent(event);
-
-        ticket.setStatus("PENDING");
-        ticket.setQrCode(UUID.randomUUID().toString());
-
-        Ticket savedTicket = ticketRepository.save(ticket);
-
-        return modelMapper.map(savedTicket, TicketDto.class);
+            return modelMapper.map(savedTicket, TicketDto.class);
+        } else {
+            return null;
+        }
     }
 
+    //TODO - TESTAR
     @Override
     public TicketDto updateTicket(Long ticketId, TicketDto ticketDto) {
-        Ticket ticket = ticketRepository.findById(ticketId).orElse(null);
-        if (ticket != null) {
-            ticket.setParticipantEmail(ticketDto.getParticipantEmail()); // Change the E-mail field 
-            ticket.setParticipantName(ticketDto.getParticipantName()); // Change the nome field
+        Optional<Ticket> ticket = ticketRepository.findById(ticketId);
+        if (ticket.isPresent()) {
+            ticket.get().setParticipantEmail(ticketDto.getParticipantEmail());
+            ticket.get().setParticipantName(ticketDto.getParticipantName());
 
-            ticketRepository.save(ticket); // Save changes
+            ticketRepository.save(ticket.get()); // Save changes
 
             return modelMapper.map(ticket, TicketDto.class);
         } else {
             return null;
         }
     }
-
 }
