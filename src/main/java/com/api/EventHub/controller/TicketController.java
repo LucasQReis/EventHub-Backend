@@ -3,7 +3,6 @@ package com.api.EventHub.controller;
 import com.api.EventHub.model.dto.TicketDto;
 import com.api.EventHub.service.TicketServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,7 +31,6 @@ public class TicketController implements TicketControllerApi {
     }
 
     // Create a new ticket
-    //TODO - TESTAR
     @PostMapping
     public ResponseEntity<TicketDto> createTicket(@RequestBody TicketDto ticketDto) {
         Optional<TicketDto> tickedCreated = Optional.ofNullable(ticketService.createTicket(ticketDto));
@@ -40,7 +38,6 @@ public class TicketController implements TicketControllerApi {
     }
 
     // Delete ticket
-    //TODO - TESTAR
     @DeleteMapping("/{id}")
     public ResponseEntity<TicketDto> deleteTicket(@PathVariable Long id) {
         Optional<TicketDto> deletedTicket = Optional.ofNullable(ticketService.deleteTicket(id));
@@ -48,7 +45,6 @@ public class TicketController implements TicketControllerApi {
     }
 
     // Update Ticket
-    //TODO - TESTAR
     @PutMapping("/{id}")
     public ResponseEntity<TicketDto> updateTicket(
             @PathVariable Long id,

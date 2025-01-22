@@ -1,6 +1,17 @@
 package com.api.EventHub.model.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Column;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.Version;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,9 +31,12 @@ public class Ticket {
     @Column(name = "ID_TICKET")
     private Long ticketId;
 
-    @ManyToOne
-    @JoinColumn(name = "EVENT_ID", nullable = false) // FK para Event
-    private Event event;
+    @Version
+    private Long version;
+
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_event", nullable = false)
+    private Event eventId;
 
     @Column(name = "NM_PARTICIPANT")
     private String participantName;
@@ -60,12 +74,20 @@ public class Ticket {
         this.ticketId = ticketId;
     }
 
-    public Event getEvent() {
-        return event;
+    public Long getVersion() {
+        return version;
     }
 
-    public void setEvent(Event event) {
-        this.event = event;
+    public void setVersion(Long version) {
+        this.version = version;
+    }
+
+    public Event getEventId() {
+        return eventId;
+    }
+
+    public void setEventId(Event event) {
+        this.eventId = event;
     }
 
     public String getParticipantName() {
@@ -143,5 +165,9 @@ public class Ticket {
     @PrePersist
     protected void onCreate() {
         this.purchaseDate = new Date();
+
+        if (this.version == null) {
+            this.version = 0L;
+        }
     }
 }

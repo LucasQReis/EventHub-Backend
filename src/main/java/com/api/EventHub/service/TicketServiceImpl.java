@@ -5,11 +5,12 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import com.api.EventHub.model.enums.TicketStatusEnum;
+import com.api.EventHub.model.entity.Event;
+import jakarta.persistence.*;
+import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 
 import com.api.EventHub.model.dto.TicketDto;
-import com.api.EventHub.model.entity.Event;
 import com.api.EventHub.model.entity.Ticket;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +18,6 @@ import org.springframework.stereotype.Service;
 
 import com.api.EventHub.repository.EventRepository;
 import com.api.EventHub.repository.TicketRepository;
-
-import javax.swing.text.html.Option;
 
 @Service
 public class TicketServiceImpl implements TicketService {
@@ -31,6 +30,9 @@ public class TicketServiceImpl implements TicketService {
 
     @Autowired
     private ModelMapper modelMapper;
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Override
     public List<TicketDto> getAllTickets() {
@@ -46,7 +48,6 @@ public class TicketServiceImpl implements TicketService {
         return modelMapper.map(ticket, TicketDto.class);
     }
 
-    //TODO - TESTAR
     @Override
     public TicketDto deleteTicket(Long ticketId) {
         Optional<Ticket> ticketDeleted = ticketRepository.findById(ticketId);
@@ -54,26 +55,20 @@ public class TicketServiceImpl implements TicketService {
         return modelMapper.map(ticketDeleted, TicketDto.class);
     }
 
-    //TODO - TESTAR
     @Override
+    @Transactional
     public TicketDto createTicket(TicketDto ticketDto) {
-        Optional<Event> event = eventRepository.findById(ticketDto.getEventId());
+        return eventRepository.findById(ticketDto.getEventId())
+                .map(event -> {
+                    Ticket ticket = this.getTicketFromTicketDto(ticketDto, event);
+                    entityManager.persist(ticket);
+                    entityManager.flush();
 
-        if (event.isPresent()) {
-            Ticket ticket = modelMapper.map(ticketDto, Ticket.class);
-
-            ticket.setEvent(event.get());
-            ticket.setStatus(TicketStatusEnum.PENDING.getDescription());
-            ticket.setQrCode(UUID.randomUUID().toString());
-            Ticket savedTicket = ticketRepository.save(ticket);
-
-            return modelMapper.map(savedTicket, TicketDto.class);
-        } else {
-            return null;
-        }
+                    return modelMapper.map(ticket, TicketDto.class);
+                })
+                .orElseThrow(() -> new EntityNotFoundException("Event not found with ID: " + ticketDto.getEventId()));
     }
 
-    //TODO - TESTAR
     @Override
     public TicketDto updateTicket(Long ticketId, TicketDto ticketDto) {
         Optional<Ticket> ticket = ticketRepository.findById(ticketId);
@@ -81,11 +76,25 @@ public class TicketServiceImpl implements TicketService {
             ticket.get().setParticipantEmail(ticketDto.getParticipantEmail());
             ticket.get().setParticipantName(ticketDto.getParticipantName());
 
-            ticketRepository.save(ticket.get()); // Save changes
+            ticketRepository.save(ticket.get());
 
             return modelMapper.map(ticket, TicketDto.class);
         } else {
             return null;
         }
+    }
+
+    private Ticket getTicketFromTicketDto(TicketDto ticketDto, Event event) {
+        Ticket ticket = new Ticket();
+        ticket.setEventId(event);
+        ticket.setParticipantName(ticketDto.getParticipantName());
+        ticket.setParticipantEmail(ticketDto.getParticipantEmail());
+        ticket.setPrice(ticketDto.getPrice());
+        ticket.setTicketType(ticketDto.getTicketType());
+        ticket.setStatus(ticketDto.getStatus());
+        ticket.setSeatNumber(ticketDto.getSeatNumber());
+        ticket.setQrCode(UUID.randomUUID().toString());
+        ticket.setQuantity(ticketDto.getQuantity());
+        return ticket;
     }
 }
