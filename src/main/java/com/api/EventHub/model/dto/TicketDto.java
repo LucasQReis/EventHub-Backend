@@ -9,9 +9,6 @@ import java.util.Date;
 @Data
 public class TicketDto {
 
-    @JsonProperty("ticketId")
-    private Long ticketId;
-
     @JsonProperty("eventId")
     private Long eventId;
 
@@ -40,22 +37,10 @@ public class TicketDto {
     @JsonProperty("seatNumber")
     private String seatNumber;
 
-    @JsonProperty("qrCode")
-    private String qrCode;
-
     @JsonProperty("quantity")
     private int quantity;
 
     // Getters e Setters
-
-    public Long getTicketId() {
-        return ticketId;
-    }
-
-    public void setTicketId(Long ticketId) {
-        this.ticketId = ticketId;
-    }
-
     public Long getEventId() {
         return eventId;
     }
@@ -126,14 +111,6 @@ public class TicketDto {
 
     public void setSeatNumber(String seatNumber) {
         this.seatNumber = seatNumber;
-    }
-
-    public String getQrCode() {
-        return qrCode;
-    }
-
-    public void setQrCode(String qrCode) {
-        this.qrCode = qrCode;
     }
 
     public int getQuantity() {

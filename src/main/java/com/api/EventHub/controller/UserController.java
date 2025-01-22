@@ -1,6 +1,7 @@
 package com.api.EventHub.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -49,25 +50,17 @@ public class UserController implements UserControllerApi {
     // Delete user
     @DeleteMapping("/{id}")
     public ResponseEntity<UserDto> deleteUser(@PathVariable Long id) {
-        UserDto deletedUser = userService.deleteUser(id);
-        if (deletedUser != null) {
-            return ResponseEntity.ok(deletedUser);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        Optional<UserDto> userDeleted = Optional.ofNullable(userService.deleteUser(id));
+        return userDeleted.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     // Update User
+    //TODO - TESTAR
     @PutMapping("/{id}")
     public ResponseEntity<UserDto> updatedUser(
             @PathVariable Long id,
             @RequestBody UserDto userDto) {
-        UserDto updatedUser = userService.updateUser(id, userDto);
-
-        if (updatedUser != null) {
-            return ResponseEntity.ok(updatedUser);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        Optional<UserDto> userUpdated = Optional.ofNullable(userService.updateUser(id, userDto));
+        return userUpdated.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 }

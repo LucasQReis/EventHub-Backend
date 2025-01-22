@@ -19,6 +19,9 @@ public class Event {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
+    @Version
+    private Long version;
+
     @Column(name = "NM_NAME")
     private String name;
 
@@ -82,6 +85,14 @@ public class Event {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
     }
 
     public String getName() {
