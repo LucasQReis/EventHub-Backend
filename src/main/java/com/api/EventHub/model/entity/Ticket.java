@@ -35,7 +35,7 @@ public class Ticket {
     private Long version;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_event", nullable = false)
+    @JoinColumn(name = "ID_EVENT", nullable = false)
     private Event eventId;
 
     @Column(name = "NM_PARTICIPANT")

@@ -2,13 +2,10 @@ package com.api.EventHub.service;
 
 import java.sql.Date;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import com.api.EventHub.model.dto.EventDto;
-import com.api.EventHub.model.entity.Event;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -51,8 +48,8 @@ public class UserServiceImpl implements UserService {
     public UserDto createUser(UserDto userDto) {
         User user = modelMapper.map(userDto, User.class);
 
-        user.setDateCreateAcount(
-                Optional.ofNullable(userDto.getDateCreateAcount())
+        user.setDateCreated(
+                Optional.ofNullable(userDto.getDateCreated())
                         .orElse(Date.valueOf(LocalDate.now()))
         );
 

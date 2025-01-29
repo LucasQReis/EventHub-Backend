@@ -12,37 +12,37 @@ import java.sql.Date;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "usuario")
+@Entity(name = "USUARIO")
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_user")
+    @Column(name = "ID_USER")
     private Long userId;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "NM_NAME", nullable = false)
     private String name;
 
-    @Column(name = "lastname", nullable = false)
+    @Column(name = "NM_LASTNAME", nullable = false)
     private String lastname;
 
-    @Column(name = "email", unique = true, nullable = false)
+    @Column(name = "DS_EMAIL", unique = true, nullable = false)
     private String email;
 
-    @Column(name = "phone")
+    @Column(name = "DS_PHONE")
     private String phone;
 
-    @Column(name = "password", nullable = false)
+    @Column(name = "DS_PASSWORD", nullable = false)
     private String password;
 
-    @Column(name = "level_acess", nullable = false)
+    @Column(name = "IE_LEVEL_ACESS", nullable = false)
     private String levelAcess;
 
-    @Column(name = "date_create_acount", nullable = false)
-    private Date dateCreateAcount;
+    @Column(name = "DT_CREATED", nullable = false)
+    private Date dateCreated;
 
-    @Column(name = "ie_status", nullable = false)
-    private Boolean ieStatus;
+    @Column(name = "IE_STATUS", nullable = false)
+    private Boolean status;
 
     // Getters e Setters
     public Long getUserId() {
@@ -101,19 +101,19 @@ public class User {
         this.levelAcess = levelAcess;
     }
 
-    public Date getDateCreateAcount() {
-        return dateCreateAcount;
+    public Date getDateCreated() {
+        return dateCreated;
     }
 
-    public void setDateCreateAcount(Date dateCreateAcount) {
-        this.dateCreateAcount = dateCreateAcount;
+    public void setDateCreated(Date dateCreated) {
+        this.dateCreated = dateCreated;
     }
 
-    public Boolean getIeStatus() {
-        return ieStatus;
+    public Boolean getStatus() {
+        return status;
     }
 
-    public void setIeStatus(Boolean ieStatus) {
-        this.ieStatus = ieStatus;
+    public void setStatus(Boolean status) {
+        this.status = status;
     }
 }

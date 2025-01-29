@@ -55,7 +55,6 @@ public class UserController implements UserControllerApi {
     }
 
     // Update User
-    //TODO - TESTAR
     @PutMapping("/{id}")
     public ResponseEntity<UserDto> updatedUser(
             @PathVariable Long id,

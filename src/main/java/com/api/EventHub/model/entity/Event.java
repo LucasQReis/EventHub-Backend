@@ -65,18 +65,18 @@ public class Event {
     private Date creationDate;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "DT_ATUALIZATION")
-    private Date atualizationDate;
+    @Column(name = "DT_UPDATE")
+    private Date updateDate;
 
     @PrePersist
     protected void onCreate() {
         this.creationDate = new Date();
-        this.atualizationDate = new Date();
+        this.updateDate = new Date();
     }
 
     @PreUpdate
     protected void onUpdate() {
-        this.atualizationDate = new Date();
+        this.updateDate = new Date();
     }
 
     public long getId() {
@@ -199,11 +199,11 @@ public class Event {
         this.creationDate = creationDate;
     }
 
-    public Date getAtualizationDate() {
-        return atualizationDate;
+    public Date getUpdateDate() {
+        return updateDate;
     }
 
-    public void setAtualizationDate(Date atualizationDate) {
-        this.atualizationDate = atualizationDate;
+    public void setUpdateDate(Date updateDate) {
+        this.updateDate = updateDate;
     }
 }

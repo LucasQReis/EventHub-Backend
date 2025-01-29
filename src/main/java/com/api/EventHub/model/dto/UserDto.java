@@ -34,15 +34,15 @@ public class UserDto {
     @NotNull(message = "Password cannot be null")
     private String password;
 
-    @JsonProperty("level_acess")
+    @JsonProperty("levelAcess")
     @NotNull(message = "Level acess cannot be null")
     private String levelAcess;
 
-    @JsonProperty("date_create_acount")
-    private Date dateCreateAcount;
+    @JsonProperty("dateCreated")
+    private Date dateCreated;
 
-    @JsonProperty("ie_status")
-    private Boolean ieStatus;
+    @JsonProperty("status")
+    private Boolean status;
 
     // Getters and Setters
 
@@ -94,19 +94,19 @@ public class UserDto {
         this.levelAcess = levelAcess;
     }
 
-    public Date getDateCreateAcount() {
-        return dateCreateAcount;
+    public Date getDateCreated() {
+        return dateCreated;
     }
 
-    public void setDateCreateAcount(Date dateCreateAcount) {
-        this.dateCreateAcount = dateCreateAcount;
+    public void setDateCreated(Date dateCreated) {
+        this.dateCreated = dateCreated;
     }
 
-    public Boolean getIeStatus() {
-        return ieStatus;
+    public Boolean getStatus() {
+        return status;
     }
 
-    public void setIeStatus(Boolean ieStatus) {
-        this.ieStatus = ieStatus;
+    public void setStatus(Boolean status) {
+        this.status = status;
     }
 }
