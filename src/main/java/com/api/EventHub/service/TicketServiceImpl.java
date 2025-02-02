@@ -1,11 +1,13 @@
 package com.api.EventHub.service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 import com.api.EventHub.model.entity.Event;
+import com.api.EventHub.model.enums.TicketTypeEnum;
 import jakarta.persistence.*;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
@@ -70,11 +72,11 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
-    public TicketDto updateTicket(Long ticketId, TicketDto ticketDto) {
+    public TicketDto updateTicket(Long ticketId, String email, String name) {
         Optional<Ticket> ticket = ticketRepository.findById(ticketId);
         if (ticket.isPresent()) {
-            ticket.get().setParticipantEmail(ticketDto.getParticipantEmail());
-            ticket.get().setParticipantName(ticketDto.getParticipantName());
+            ticket.get().setParticipantEmail(email);
+            ticket.get().setParticipantName(name);
 
             ticketRepository.save(ticket.get());
 
@@ -90,11 +92,22 @@ public class TicketServiceImpl implements TicketService {
         ticket.setParticipantName(ticketDto.getParticipantName());
         ticket.setParticipantEmail(ticketDto.getParticipantEmail());
         ticket.setPrice(ticketDto.getPrice());
-        ticket.setTicketType(ticketDto.getTicketType());
+        ticket.setTicketType(getTicketTypeValue(ticketDto.getTicketType()));
         ticket.setStatus(ticketDto.getStatus());
         ticket.setSeatNumber(ticketDto.getSeatNumber());
         ticket.setQrCode(UUID.randomUUID().toString());
         ticket.setQuantity(ticketDto.getQuantity());
         return ticket;
+    }
+
+    private String getTicketTypeValue(String type) {
+        boolean isValidType = Arrays.stream(TicketTypeEnum.values())
+                .anyMatch(enumValue -> enumValue.getDescription().equals(type));
+
+        if (!isValidType) {
+            throw new IllegalArgumentException("Invalid ticket type: " + type);
+        } else {
+            return type;
+        }
     }
 }

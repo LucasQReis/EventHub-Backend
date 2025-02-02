@@ -48,8 +48,9 @@ public class TicketController implements TicketControllerApi {
     @PutMapping("/{id}")
     public ResponseEntity<TicketDto> updateTicket(
             @PathVariable Long id,
-            @RequestBody TicketDto ticketDto) {
-        Optional<TicketDto> ticketUpdated = Optional.ofNullable(ticketService.updateTicket(id, ticketDto));
+            @RequestParam String email,
+            @RequestParam String name) {
+        Optional<TicketDto> ticketUpdated = Optional.ofNullable(ticketService.updateTicket(id, email, name));
         return ticketUpdated.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 }

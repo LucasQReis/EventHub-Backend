@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -65,5 +66,6 @@ public interface TicketControllerApi {
                     @ApiResponse(responseCode = "404", description = "Ticket not found")
             }
     )
-    ResponseEntity<TicketDto> updateTicket(@PathVariable Long id, @RequestBody TicketDto ticketDto);
+    ResponseEntity<TicketDto> updateTicket(@PathVariable Long id, @RequestParam String email,
+                                           @RequestParam String name);
 }

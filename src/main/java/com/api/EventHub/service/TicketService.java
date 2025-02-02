@@ -12,12 +12,7 @@ public interface TicketService {
     // create a new ticket
     public TicketDto createTicket(TicketDto ticketDto);
     // update ticket
-    public TicketDto updateTicket(Long ticketId, TicketDto ticketDto);
+    public TicketDto updateTicket(Long ticketId, String email, String name);
     // delete ticket
     public TicketDto deleteTicket(Long ticketId);
-
-    // TODO search event by filter
-    // TODO change event status
-    // TODO list all events participants
-    // TODO create a review of the given event
 }
