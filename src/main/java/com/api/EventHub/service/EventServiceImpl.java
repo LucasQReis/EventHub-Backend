@@ -7,6 +7,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.DateTimeException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -44,14 +45,14 @@ public class EventServiceImpl implements EventService {
     @Override
     public EventDto createEvent(EventDto eventDto) {
         Event event = modelMapper.map(eventDto, Event.class);
-        Event savedEvent = eventRepository.save(event);
+        Event savedEvent = checkValues(event);
         return modelMapper.map(savedEvent, EventDto.class);
     }
 
     @Override
     public EventDto updateEvent(Long eventId, EventDto eventDto) {
         Optional<Event> event = eventRepository.findById(eventId);
-        event.ifPresent(value -> eventRepository.save(this.updatedEvent(value, eventDto)));
+        event.ifPresent(value -> checkValues(this.updatedEvent(value, eventDto)));
         return modelMapper.map(event, EventDto.class);
     }
 
@@ -79,6 +80,14 @@ public class EventServiceImpl implements EventService {
             return modelMapper.map(event, EventDto.class);
         } else {
             return null;
+        }
+    }
+
+    private Event checkValues(Event event) {
+        if (event.getStartDate().toInstant().isBefore(event.getEndDate().toInstant())) {
+            return eventRepository.save(event);
+        } else {
+            throw new DateTimeException("End date needs to be initialized after start date");
         }
     }
 

@@ -1,11 +1,14 @@
 package com.api.EventHub.controller;
 
+import com.api.EventHub.model.dto.EventDto;
 import com.api.EventHub.model.dto.TicketDto;
+import com.api.EventHub.model.enums.EventStatusEnum;
 import com.api.EventHub.service.TicketServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,4 +55,14 @@ public class TicketController implements TicketControllerApi {
         Optional<TicketDto> ticketUpdated = Optional.ofNullable(ticketService.updateTicket(id, ticketDto));
         return ticketUpdated.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
+
+//    boolean isValidStatus = Arrays.stream(EventStatusEnum.values())
+//            .anyMatch(enumValue -> enumValue.getDescription().equals(status));
+//
+//        if (isValidStatus) {
+//        EventDto updatedEvent = eventService.changeEventStatus(id, status);
+//        return ResponseEntity.ok(updatedEvent);
+//    } else {
+//        return ResponseEntity.notFound().build();
+//    }
 }
