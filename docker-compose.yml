@@ -1,0 +1,25 @@
+version: "3.9"
+
+services:
+  eventhub-app:
+    container_name: eventhub-app
+    image: eventhub-api
+    build: .
+    ports:
+      - "8000:8000"
+    depends_on:
+      - eventhub_db
+  eventhub_db:
+    container_name: eventhub_db
+    image: postgres:12
+    environment:
+      POSTGRES_PASSWORD: 1126
+      POSTGRES_USER: postgres
+      POSTGRES_DB: eventflow
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata: {}
