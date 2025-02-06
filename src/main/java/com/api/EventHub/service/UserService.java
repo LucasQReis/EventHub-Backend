@@ -5,7 +5,7 @@ import java.util.List;
 import com.api.EventHub.model.dto.UserDto;
 
 public interface UserService {
-            // get all User
+    // get all User
     public List<UserDto> getAllUser();
     // get User by id
     public UserDto getUserById(Long id);
@@ -15,9 +15,4 @@ public interface UserService {
     public UserDto updateUser(Long userId, UserDto userDto);
     // delete User
     public UserDto deleteUser(Long userId);
-
-    // TODO search event by filter
-    // TODO change event status
-    // TODO list all events participants
-    // TODO create a review of the given event
 }

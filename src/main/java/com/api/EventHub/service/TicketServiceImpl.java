@@ -8,7 +8,9 @@ import java.util.stream.Collectors;
 
 import com.api.EventHub.model.entity.Event;
 import com.api.EventHub.model.enums.TicketTypeEnum;
-import jakarta.persistence.*;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 

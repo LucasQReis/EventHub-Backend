@@ -19,6 +19,4 @@ public interface EventService {
     public List<EventDto> getEventsByType(String type);
     // change event status
     public EventDto changeEventStatus(Long eventId, String status);
-    // TODO list all events participants
-    // TODO create a review of the given event
 }
